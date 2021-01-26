@@ -1,0 +1,14 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: billing-service
+  cloud:
+    discovery:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:bill
+eureka:
+  client:
+    server-url:
+      defaultZone: http://localhost:8761/eureka
