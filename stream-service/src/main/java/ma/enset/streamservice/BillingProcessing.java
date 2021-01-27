@@ -3,10 +3,8 @@ package ma.enset.streamservice;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.kstream.TimeWindows;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -15,11 +13,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class PageViewEventProcessor {
+public class BillingProcessing {
     ObjectMapper objectMapper=new ObjectMapper();
     @StreamListener
-    @SendTo({AnalyticsBinding.PAGE_VIEWS_OUT})
-    public KStream<String, Double> process(@Input(AnalyticsBinding.PAGE_VIEWS_IN) KStream<Long, String> events){
+    @SendTo({AnalyticsBinding.BILLS_OUT})
+    public KStream<String, Double> process(@Input(AnalyticsBinding.BILLS_IN) KStream<Long, String> events){
         return events
                 .map((k,v)->new KeyValue<>(k,facture(v)))
                 .map((k,v)->new KeyValue<>(v.getNomClient(),v.getMontant()))
